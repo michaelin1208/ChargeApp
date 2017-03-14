@@ -1,0 +1,6 @@
+framework module Pods_ChargeApp {
+  umbrella header "Pods-ChargeApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
