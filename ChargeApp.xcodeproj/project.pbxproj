@@ -7,22 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013CAD911E77D87A0080CF5A /* SettingTabBarItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013CAD901E77D87A0080CF5A /* SettingTabBarItemController.swift */; };
+		013CAD931E77DCB70080CF5A /* MMDraggableTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013CAD921E77DCB70080CF5A /* MMDraggableTagView.swift */; };
+		013CAD951E77DE380080CF5A /* MMDraggableTagData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013CAD941E77DE380080CF5A /* MMDraggableTagData.swift */; };
+		013CAD971E77F70C0080CF5A /* MMDraggableTagDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013CAD961E77F70C0080CF5A /* MMDraggableTagDataManager.swift */; };
 		014400471E77BBA100D819A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014400461E77BBA100D819A9 /* AppDelegate.swift */; };
-		014400491E77BBA100D819A9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014400481E77BBA100D819A9 /* ViewController.swift */; };
 		0144004C1E77BBA100D819A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0144004A1E77BBA100D819A9 /* Main.storyboard */; };
 		0144004E1E77BBA100D819A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0144004D1E77BBA100D819A9 /* Assets.xcassets */; };
 		014400511E77BBA100D819A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0144004F1E77BBA100D819A9 /* LaunchScreen.storyboard */; };
+		014400591E77CD6900D819A9 /* ListTabBarItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014400581E77CD6900D819A9 /* ListTabBarItemController.swift */; };
+		0144005B1E77CD7800D819A9 /* AddTabBarItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144005A1E77CD7800D819A9 /* AddTabBarItemController.swift */; };
 		7D79FE8B99581FA9B2060E17 /* Pods_ChargeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 761E242B6D13B3B337ADD886 /* Pods_ChargeApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		013CAD901E77D87A0080CF5A /* SettingTabBarItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingTabBarItemController.swift; sourceTree = "<group>"; };
+		013CAD921E77DCB70080CF5A /* MMDraggableTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMDraggableTagView.swift; sourceTree = "<group>"; };
+		013CAD941E77DE380080CF5A /* MMDraggableTagData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMDraggableTagData.swift; sourceTree = "<group>"; };
+		013CAD961E77F70C0080CF5A /* MMDraggableTagDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMDraggableTagDataManager.swift; sourceTree = "<group>"; };
 		014400431E77BBA100D819A9 /* ChargeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChargeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		014400461E77BBA100D819A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		014400481E77BBA100D819A9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		0144004B1E77BBA100D819A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0144004D1E77BBA100D819A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		014400501E77BBA100D819A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		014400521E77BBA100D819A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		014400581E77CD6900D819A9 /* ListTabBarItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTabBarItemController.swift; sourceTree = "<group>"; };
+		0144005A1E77CD7800D819A9 /* AddTabBarItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTabBarItemController.swift; sourceTree = "<group>"; };
 		761E242B6D13B3B337ADD886 /* Pods_ChargeApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChargeApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0DE713FDEBBDEF754AE9FB5 /* Pods-ChargeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChargeApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChargeApp/Pods-ChargeApp.debug.xcconfig"; sourceTree = "<group>"; };
 		FA517DED43A0642EE993921E /* Pods-ChargeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChargeApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChargeApp/Pods-ChargeApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -62,7 +72,12 @@
 			isa = PBXGroup;
 			children = (
 				014400461E77BBA100D819A9 /* AppDelegate.swift */,
-				014400481E77BBA100D819A9 /* ViewController.swift */,
+				014400581E77CD6900D819A9 /* ListTabBarItemController.swift */,
+				013CAD901E77D87A0080CF5A /* SettingTabBarItemController.swift */,
+				0144005A1E77CD7800D819A9 /* AddTabBarItemController.swift */,
+				013CAD921E77DCB70080CF5A /* MMDraggableTagView.swift */,
+				013CAD961E77F70C0080CF5A /* MMDraggableTagDataManager.swift */,
+				013CAD941E77DE380080CF5A /* MMDraggableTagData.swift */,
 				0144004A1E77BBA100D819A9 /* Main.storyboard */,
 				0144004D1E77BBA100D819A9 /* Assets.xcassets */,
 				0144004F1E77BBA100D819A9 /* LaunchScreen.storyboard */,
@@ -212,8 +227,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				014400491E77BBA100D819A9 /* ViewController.swift in Sources */,
+				013CAD931E77DCB70080CF5A /* MMDraggableTagView.swift in Sources */,
+				0144005B1E77CD7800D819A9 /* AddTabBarItemController.swift in Sources */,
+				014400591E77CD6900D819A9 /* ListTabBarItemController.swift in Sources */,
+				013CAD951E77DE380080CF5A /* MMDraggableTagData.swift in Sources */,
 				014400471E77BBA100D819A9 /* AppDelegate.swift in Sources */,
+				013CAD971E77F70C0080CF5A /* MMDraggableTagDataManager.swift in Sources */,
+				013CAD911E77D87A0080CF5A /* SettingTabBarItemController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +399,7 @@
 				014400571E77BBA100D819A9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
