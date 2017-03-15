@@ -10,7 +10,7 @@
 		013CAD911E77D87A0080CF5A /* SettingTabBarItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013CAD901E77D87A0080CF5A /* SettingTabBarItemController.swift */; };
 		013CAD931E77DCB70080CF5A /* MMDraggableTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013CAD921E77DCB70080CF5A /* MMDraggableTagView.swift */; };
 		013CAD951E77DE380080CF5A /* MMDraggableTagData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013CAD941E77DE380080CF5A /* MMDraggableTagData.swift */; };
-		013CAD971E77F70C0080CF5A /* MMDraggableTagDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013CAD961E77F70C0080CF5A /* MMDraggableTagDataManager.swift */; };
+		013ED0CC1E790DFC00C5987A /* MMDraggableTagViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013ED0CB1E790DFC00C5987A /* MMDraggableTagViewCell.swift */; };
 		014400471E77BBA100D819A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014400461E77BBA100D819A9 /* AppDelegate.swift */; };
 		0144004C1E77BBA100D819A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0144004A1E77BBA100D819A9 /* Main.storyboard */; };
 		0144004E1E77BBA100D819A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0144004D1E77BBA100D819A9 /* Assets.xcassets */; };
@@ -24,7 +24,7 @@
 		013CAD901E77D87A0080CF5A /* SettingTabBarItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingTabBarItemController.swift; sourceTree = "<group>"; };
 		013CAD921E77DCB70080CF5A /* MMDraggableTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMDraggableTagView.swift; sourceTree = "<group>"; };
 		013CAD941E77DE380080CF5A /* MMDraggableTagData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMDraggableTagData.swift; sourceTree = "<group>"; };
-		013CAD961E77F70C0080CF5A /* MMDraggableTagDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMDraggableTagDataManager.swift; sourceTree = "<group>"; };
+		013ED0CB1E790DFC00C5987A /* MMDraggableTagViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMDraggableTagViewCell.swift; sourceTree = "<group>"; };
 		014400431E77BBA100D819A9 /* ChargeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChargeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		014400461E77BBA100D819A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0144004B1E77BBA100D819A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 				013CAD901E77D87A0080CF5A /* SettingTabBarItemController.swift */,
 				0144005A1E77CD7800D819A9 /* AddTabBarItemController.swift */,
 				013CAD921E77DCB70080CF5A /* MMDraggableTagView.swift */,
-				013CAD961E77F70C0080CF5A /* MMDraggableTagDataManager.swift */,
+				013ED0CB1E790DFC00C5987A /* MMDraggableTagViewCell.swift */,
 				013CAD941E77DE380080CF5A /* MMDraggableTagData.swift */,
 				0144004A1E77BBA100D819A9 /* Main.storyboard */,
 				0144004D1E77BBA100D819A9 /* Assets.xcassets */,
@@ -229,10 +229,10 @@
 			files = (
 				013CAD931E77DCB70080CF5A /* MMDraggableTagView.swift in Sources */,
 				0144005B1E77CD7800D819A9 /* AddTabBarItemController.swift in Sources */,
+				013ED0CC1E790DFC00C5987A /* MMDraggableTagViewCell.swift in Sources */,
 				014400591E77CD6900D819A9 /* ListTabBarItemController.swift in Sources */,
 				013CAD951E77DE380080CF5A /* MMDraggableTagData.swift in Sources */,
 				014400471E77BBA100D819A9 /* AppDelegate.swift in Sources */,
-				013CAD971E77F70C0080CF5A /* MMDraggableTagDataManager.swift in Sources */,
 				013CAD911E77D87A0080CF5A /* SettingTabBarItemController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
