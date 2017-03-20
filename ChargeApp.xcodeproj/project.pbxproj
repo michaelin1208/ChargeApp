@@ -50,6 +50,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		010F11841E7BBCAB005E7667 /* MMDraggableTagView */ = {
+			isa = PBXGroup;
+			children = (
+				013CAD921E77DCB70080CF5A /* MMDraggableTagView.swift */,
+				013ED0CB1E790DFC00C5987A /* MMDraggableTagViewCell.swift */,
+				013CAD941E77DE380080CF5A /* MMDraggableTagData.swift */,
+			);
+			name = MMDraggableTagView;
+			sourceTree = "<group>";
+		};
 		0144003A1E77BBA100D819A9 = {
 			isa = PBXGroup;
 			children = (
@@ -75,9 +85,7 @@
 				014400581E77CD6900D819A9 /* ListTabBarItemController.swift */,
 				013CAD901E77D87A0080CF5A /* SettingTabBarItemController.swift */,
 				0144005A1E77CD7800D819A9 /* AddTabBarItemController.swift */,
-				013CAD921E77DCB70080CF5A /* MMDraggableTagView.swift */,
-				013ED0CB1E790DFC00C5987A /* MMDraggableTagViewCell.swift */,
-				013CAD941E77DE380080CF5A /* MMDraggableTagData.swift */,
+				010F11841E7BBCAB005E7667 /* MMDraggableTagView */,
 				0144004A1E77BBA100D819A9 /* Main.storyboard */,
 				0144004D1E77BBA100D819A9 /* Assets.xcassets */,
 				0144004F1E77BBA100D819A9 /* LaunchScreen.storyboard */,

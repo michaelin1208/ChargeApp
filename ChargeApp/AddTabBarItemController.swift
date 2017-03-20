@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddTabBarItemController: UIViewController, MMDraggableTagDataDelegate {
+class AddTabBarItemController: UIViewController, MMDraggableTagDataDelegate, UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +26,10 @@ class AddTabBarItemController: UIViewController, MMDraggableTagDataDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        <#code#>
+//    }
     
     func subTitlesOfDraggableTag(in indexArray: [Int]) -> [NSString]? {
         if indexArray.count > 1 {

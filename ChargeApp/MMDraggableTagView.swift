@@ -12,8 +12,9 @@ import SnapKit
 let padding:CGFloat = 10
 
 protocol MMDraggableTagDataDelegate: class {
-    func subTitlesOfDraggableTag(in indexArray:[Int]) -> [NSString]?
-    func didSelectTag(_ indexArray:[Int])
+    func draggableTagView(_ draggableTagView:MMDraggableTagView, subTitlesFor indexArray:[Int]) -> [NSString]?
+    func draggableTagView(_ draggableTagView:MMDraggableTagView, didSelectTag indexArray:[Int])
+    func draggableTagView(_ draggableTagView:MMDraggableTagView, colorFor indexArray:[Int]) -> UIColor
 }
 
 class MMDraggableTagView: UIView {
@@ -41,7 +42,7 @@ class MMDraggableTagView: UIView {
     }
     
     func drawTagView(at indexArray:[Int]) {
-        let titles = delegate?.subTitlesOfDraggableTag(in: indexArray)
+        let titles = delegate?.draggableTagView(self, subTitlesFor: indexArray)
         if (titles != nil) {
             var i = 0
             for title in titles! {
