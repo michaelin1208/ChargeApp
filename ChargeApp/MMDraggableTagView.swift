@@ -11,13 +11,15 @@ import SnapKit
 
 let padding:CGFloat = 10
 
-protocol MMDraggableTagDataDelegate: class {
-    func subTitlesOfDraggableTag(in indexArray:[Int]) -> [NSString]?
-    func didSelectTag(_ indexArray:[Int])
+@objc protocol MMDraggableTagViewDelegate: NSObjectProtocol {
+    func draggableTagView(_ draggableTagView:MMDraggableTagView, cellFor indexArray:[Int]) -> MMDraggableTagViewCell?
+    @objc optional func draggableTagView(_ draggableTagView:MMDraggableTagView, didSelectTag indexArray:[Int])
+    @objc optional func draggableTagView(_ draggableTagView:MMDraggableTagView, shouldSelectTag indexArray:[Int]) -> Bool
+    
 }
 
-class MMDraggableTagView: UIView {
-    weak var delegate : MMDraggableTagDataDelegate?
+class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate, UITableViewDelegate {
+    weak var delegate : MMDraggableTagViewDelegate?
     var selectedTags:[[Int]]?
     
     override init(frame: CGRect) {
@@ -41,31 +43,29 @@ class MMDraggableTagView: UIView {
     }
     
     func drawTagView(at indexArray:[Int]) {
-        let titles = delegate?.subTitlesOfDraggableTag(in: indexArray)
-        if (titles != nil) {
-            var i = 0
-            for title in titles! {
-                let newIndexArray = NSMutableArray.init(array: indexArray).adding(i)
-                NSLog("title \(title)")
-                let cell = MMDraggableTagViewCell.init(tagIndexArray: newIndexArray as! [Int])
-                cell.setTitle(title as String, for: .normal)
-                cell.layer.masksToBounds = true
-                cell.layer.borderColor = UIColor.blue.cgColor
-                cell.layer.borderWidth = 1
-                cell.layer.cornerRadius = 3;
+        NSLog("indexArray: \(indexArray)")
+        var indexArr = indexArray
+        let cell = delegate?.draggableTagView(self, cellFor: indexArray)
+        if (cell != nil) {
+            
+            if cell!.frame.size.width == 0 && cell!.titleLabel != nil && cell!.titleLabel!.text != nil{
                 
-                if cell.titleLabel != nil {
-                    var titleSize = title.size(attributes: [NSFontAttributeName: UIFont.init(name: cell.titleLabel!.font.fontName, size: cell.titleLabel!.font.pointSize)!])
-                    titleSize.height += 10
-                    titleSize.width += 20
-                    cell.frame = CGRect.init(x: cell.frame.origin.x, y: cell.frame.origin.y, width: titleSize.width, height: titleSize.height)
-                }
+                var titleSize = cell!.titleLabel!.text!.size(attributes: [NSFontAttributeName: UIFont.init(name: cell!.titleLabel!.font.fontName, size: cell!.titleLabel!.font.pointSize)!])
+                titleSize.height += 10
+                titleSize.width += 20
+                cell!.frame = CGRect.init(x: cell!.frame.origin.x, y: cell!.frame.origin.y, width: titleSize.width, height: titleSize.height)
                 
-                cell.backgroundColor = UIColor.green
-                self.addSubview(cell)
-                
-                i += 1
-                drawTagView(at: newIndexArray as! [Int])
+            }
+            
+            cell!.delegate = self
+            self.addSubview(cell!)
+            indexArr.append(0)
+            self.drawTagView(at: indexArr)
+        }else{
+            if indexArr.count > 1 {
+                indexArr.removeLast()
+                indexArr[indexArr.count-1] += 1
+                self.drawTagView(at: indexArr)
             }
         }
     }
@@ -149,6 +149,22 @@ class MMDraggableTagView: UIView {
                 
             }
         }
+    }
+
+//MARK:- MMDraggableTagViewCellDelegate
+    
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, didClickedIn indexArray: [Int]) {
+        var shouldSelect = true
+        if (delegate?.draggableTagView?(self, shouldSelectTag: indexArray) != nil) {
+            shouldSelect = (delegate?.draggableTagView?(self, shouldSelectTag: indexArray))!
+        }
+        if shouldSelect {
+            delegate?.draggableTagView?(self, didSelectTag: indexArray)
+        }
+    }
+    
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, didDraggedFrom indexArray: [Int]) {
+        NSLog("didDraggedFrom\(indexArray)")
     }
     
 }
