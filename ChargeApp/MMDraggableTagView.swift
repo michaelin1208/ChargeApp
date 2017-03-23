@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 
 let padding:CGFloat = 10
+let cellHeightPadding:CGFloat = 5
+let cellWidthPadding:CGFloat = 10
 
 @objc protocol MMDraggableTagViewDelegate: NSObjectProtocol {
     func draggableTagView(_ draggableTagView:MMDraggableTagView, cellFor indexArray:[Int]) -> MMDraggableTagViewCell?
@@ -18,13 +20,14 @@ let padding:CGFloat = 10
     
 }
 
-class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate, UITableViewDelegate {
+class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
     weak var delegate : MMDraggableTagViewDelegate?
     var selectedTags:[[Int]]?
+    let cells:NSMutableArray! = NSMutableArray.init()
+    var draggingCell:MMDraggableTagViewCell?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,10 +36,11 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate, UITableViewDel
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.reloadData()
+        reloadData()
     }
     
     func reloadData() {
+        cells.removeAllObjects()
         drawTagView(at: [0])
         
         relocateTags()
@@ -51,14 +55,19 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate, UITableViewDel
             if cell!.frame.size.width == 0 && cell!.titleLabel != nil && cell!.titleLabel!.text != nil{
                 
                 var titleSize = cell!.titleLabel!.text!.size(attributes: [NSFontAttributeName: UIFont.init(name: cell!.titleLabel!.font.fontName, size: cell!.titleLabel!.font.pointSize)!])
-                titleSize.height += 10
-                titleSize.width += 20
+                cell!.titleLabel!.frame = CGRect(x: 10, y: 5, width: titleSize.width, height: titleSize.height)
+                titleSize.height += cellHeightPadding * 2
+                titleSize.width += cellWidthPadding * 2
                 cell!.frame = CGRect.init(x: cell!.frame.origin.x, y: cell!.frame.origin.y, width: titleSize.width, height: titleSize.height)
                 
             }
             
             cell!.delegate = self
             self.addSubview(cell!)
+            
+            cells.add(cell!)
+            
+            
             indexArr.append(0)
             self.drawTagView(at: indexArr)
         }else{
@@ -71,11 +80,17 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate, UITableViewDel
     }
     
     func relocateTags() {
-        let tagViews = self.subviews
         var lastTagViewInThisLevel:UIView?
         var lastTagViewInLastLevel:UIView?
         var currentX = padding
-        for tagView in tagViews {
+        for c in cells {
+            let tagView:MMDraggableTagViewCell = c as! MMDraggableTagViewCell
+            if draggingCell != nil {
+                if draggingCell == tagView {
+                    NSLog("I am dragging, skip")
+                    return
+                }
+            }
             if lastTagViewInThisLevel == nil {
                 if lastTagViewInLastLevel == nil {
                     tagView.snp.makeConstraints({ (make) in
@@ -163,8 +178,37 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate, UITableViewDel
         }
     }
     
-    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, didDraggedFrom indexArray: [Int]) {
-        NSLog("didDraggedFrom\(indexArray)")
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, startDraggingFrom indexArray: [Int]) {
+        NSLog("start dragging")
+        let originalCell = MMDraggableTagViewCell.init(tagIndexArray: draggableTagViewCell.tagIndex)
+        
+        //TODO: use originalCell to replace draggingCell with same status. it is easy to set location
+        
+        draggingCell = draggableTagViewCell
+    }
+    
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, draggingFrom indexArray: [Int]) {
+        NSLog("\(indexArray) is dragging")
+        for tempC in cells {
+            let tempCell = tempC as! MMDraggableTagViewCell
+            //TODO: check is it leave self orignal frame, or insert into others' gap, or in other cell's front
+            
+//            if tempCell.tagIndex! != draggableTagViewCell.tagIndex! {
+//                let intersection = tempCell.frame.intersection(draggableTagViewCell.frame)
+//                if !intersection.isNull {
+//                    if tempCell.frame.size.width/2 < intersection.size.width || tempCell.frame.size.height/2 < intersection.size.height || draggableTagViewCell.frame.size.width/2 < intersection.size.width || draggableTagViewCell.frame.size.height/2 < intersection.size.height {
+//                        NSLog("Do something.")
+//                    }
+//                }
+//            }else{
+//                NSLog("Do not need to compare with myself")
+//            }
+        }
+    }
+    
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, draggedFrom indexArray: [Int]) {
+        NSLog("dragging finished")
+        draggingCell = nil
     }
     
 }
