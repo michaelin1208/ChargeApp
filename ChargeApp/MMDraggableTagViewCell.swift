@@ -9,10 +9,10 @@
 import UIKit
 
 protocol MMDraggableTagViewCellDelegate: NSObjectProtocol {
-    func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, didClickedIn indexArray:[Int])
-    func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, startDraggingFrom indexArray:[Int])
-    func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, draggingFrom indexArray:[Int])
-    func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, draggedFrom indexArray:[Int])
+    func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, didClickedIn location:CGPoint)
+    func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, startDraggingFrom location:CGPoint)
+    func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, draggingFrom location:CGPoint)
+    func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, draggedFrom location:CGPoint)
 }
 
 class MMDraggableTagViewCell: UIView {
@@ -51,10 +51,10 @@ class MMDraggableTagViewCell: UIView {
         
         netTranslation = CGPoint(x: 0, y: 0)
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapGestur(sender:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(sender:)))
         self.addGestureRecognizer(tap)
         
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanGestur(sender:)))
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(sender:)))
         self.addGestureRecognizer(pan)
     }
     
@@ -76,29 +76,32 @@ class MMDraggableTagViewCell: UIView {
     }
     
     
-    func handleTapGestur(sender:UITapGestureRecognizer) {
-        if tagIndex != nil {
-            delegate?.draggableTagViewCell(self, didClickedIn: tagIndex!)
+    func handleTapGesture(sender:UITapGestureRecognizer) {
+        if self.superview != nil {
+            delegate?.draggableTagViewCell(self, didClickedIn: sender.location(in: self.superview))
         }
     }
     
-    func handlePanGestur(sender:UIPanGestureRecognizer) {
-        if tagIndex != nil {
+    func handlePanGesture(sender:UIPanGestureRecognizer) {
+        if self.superview != nil {
             if !isDragging {
                 isDragging = true
-                delegate?.draggableTagViewCell(self, startDraggingFrom: tagIndex!)
+                delegate?.draggableTagViewCell(self, startDraggingFrom: sender.location(in: self.superview))
             }
             let translation : CGPoint = sender.translation(in: self)
             //平移图片CGAffineTransformMakeTranslation
             self.transform = CGAffineTransform(translationX: netTranslation.x+translation.x, y: netTranslation.y+translation.y)
             
-            delegate?.draggableTagViewCell(self, draggingFrom: tagIndex!)
+            delegate?.draggableTagViewCell(self, draggingFrom: sender.location(in: self.superview))
+            
             
             if sender.state == UIGestureRecognizerState.ended{
                 isDragging = false
-                netTranslation.x += translation.x
-                netTranslation.y += translation.y
-                delegate?.draggableTagViewCell(self, draggedFrom: tagIndex!)
+                netTranslation.x = 0
+                netTranslation.y = 0
+                
+                delegate?.draggableTagViewCell(self, draggedFrom: sender.location(in: self.superview))
+                
             }
         }
     }

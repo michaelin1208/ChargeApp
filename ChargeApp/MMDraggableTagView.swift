@@ -23,9 +23,10 @@ let cellWidthPadding:CGFloat = 10
 class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
     weak var delegate : MMDraggableTagViewDelegate?
     var selectedTags:[[Int]]?
-    let cells:NSMutableArray! = NSMutableArray.init()
+    var cells:[MMDraggableTagViewCell] = []
     var draggingCell:MMDraggableTagViewCell?
-    
+    var originalCell:MMDraggableTagViewCell?
+    var isFirstLoad = true
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -36,11 +37,14 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        reloadData()
+        if isFirstLoad {
+            isFirstLoad = false
+            reloadData()
+        }
     }
     
     func reloadData() {
-        cells.removeAllObjects()
+        cells.removeAll()
         drawTagView(at: [0])
         
         relocateTags()
@@ -65,7 +69,7 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
             cell!.delegate = self
             self.addSubview(cell!)
             
-            cells.add(cell!)
+            cells.append(cell!)
             
             
             indexArr.append(0)
@@ -83,8 +87,7 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
         var lastTagViewInThisLevel:UIView?
         var lastTagViewInLastLevel:UIView?
         var currentX = padding
-        for c in cells {
-            let tagView:MMDraggableTagViewCell = c as! MMDraggableTagViewCell
+        for tagView in cells {
             if draggingCell != nil {
                 if draggingCell == tagView {
                     NSLog("I am dragging, skip")
@@ -165,50 +168,105 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
             }
         }
     }
+    
+    func replaceObject(_ originCell:MMDraggableTagViewCell, inCellsByObject targetCell:MMDraggableTagViewCell) -> Int? {
+        let replaceIndex = cells.index(of: originCell)
+        if replaceIndex != nil {
+            cells.insert(targetCell, at: replaceIndex!)
+            cells.remove(at: replaceIndex! + 1)
+            return replaceIndex
+        }
+        return nil
+    }
 
 //MARK:- MMDraggableTagViewCellDelegate
     
-    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, didClickedIn indexArray: [Int]) {
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, didClickedIn location:CGPoint) {
         var shouldSelect = true
-        if (delegate?.draggableTagView?(self, shouldSelectTag: indexArray) != nil) {
-            shouldSelect = (delegate?.draggableTagView?(self, shouldSelectTag: indexArray))!
+        if (delegate?.draggableTagView?(self, shouldSelectTag: draggableTagViewCell.tagIndex) != nil) {
+            shouldSelect = (delegate?.draggableTagView?(self, shouldSelectTag: draggableTagViewCell.tagIndex))!
         }
         if shouldSelect {
-            delegate?.draggableTagView?(self, didSelectTag: indexArray)
+            delegate?.draggableTagView?(self, didSelectTag: draggableTagViewCell.tagIndex)
         }
     }
     
-    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, startDraggingFrom indexArray: [Int]) {
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, startDraggingFrom location:CGPoint) {
         NSLog("start dragging")
-        let originalCell = MMDraggableTagViewCell.init(tagIndexArray: draggableTagViewCell.tagIndex)
+        originalCell = MMDraggableTagViewCell.init(tagIndexArray: draggableTagViewCell.tagIndex)
+        originalCell!.backgroundColor = UIColor.darkGray   //TODO: this darkgray is used to test
+        //originalCell!.titleLabel.text = "test test test"
         
-        //TODO: use originalCell to replace draggingCell with same status. it is easy to set location
+        //originalCell!.layer.masksToBounds = true
+        //originalCell!.layer.borderColor = UIColor.blue.cgColor
+        //originalCell!.layer.borderWidth = 1
+        //originalCell!.layer.cornerRadius = 3;
+        
+        originalCell!.frame = draggableTagViewCell.frame
+        
+        self.addSubview(originalCell!)
+        NSLog("frame \(originalCell!.frame)")
+        let replaceIndex = replaceObject(draggableTagViewCell, inCellsByObject: originalCell!)
+        NSLog("replaceIndex \(replaceIndex)")
         
         draggingCell = draggableTagViewCell
+        
+        self.bringSubview(toFront: draggableTagViewCell)
     }
     
-    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, draggingFrom indexArray: [Int]) {
-        NSLog("\(indexArray) is dragging")
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, draggingFrom location:CGPoint) {
+        NSLog("\(location) is dragging")
+    }
+    
+    func findInsertPosition(_ cells:[UIView], with location:CGPoint) -> Int {
+        var index = 0
         for tempC in cells {
             let tempCell = tempC as! MMDraggableTagViewCell
+            
+            if location.y > tempCell.frame.origin.y && location.y < tempCell.frame.origin.y + tempCell.frame.size.height {
+                //if index {
+                //
+               // }
+            }
+            
+            index += 1
             //TODO: check is it leave self orignal frame, or insert into others' gap, or in other cell's front
             
-//            if tempCell.tagIndex! != draggableTagViewCell.tagIndex! {
-//                let intersection = tempCell.frame.intersection(draggableTagViewCell.frame)
-//                if !intersection.isNull {
-//                    if tempCell.frame.size.width/2 < intersection.size.width || tempCell.frame.size.height/2 < intersection.size.height || draggableTagViewCell.frame.size.width/2 < intersection.size.width || draggableTagViewCell.frame.size.height/2 < intersection.size.height {
-//                        NSLog("Do something.")
-//                    }
-//                }
-//            }else{
-//                NSLog("Do not need to compare with myself")
-//            }
+            
+            
+            
+            //            if tempCell.tagIndex! != draggableTagViewCell.tagIndex! {
+            //                let intersection = tempCell.frame.intersection(draggableTagViewCell.frame)
+            //                if !intersection.isNull {
+            //                    if tempCell.frame.size.width/2 < intersection.size.width || tempCell.frame.size.height/2 < intersection.size.height || draggableTagViewCell.frame.size.width/2 < intersection.size.width || draggableTagViewCell.frame.size.height/2 < intersection.size.height {
+            //                        NSLog("Do something.")
+            //                    }
+            //                }
+            //            }else{
+            //                NSLog("Do not need to compare with myself")
+            //            }
         }
+        return 5;
+
     }
     
-    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, draggedFrom indexArray: [Int]) {
+    func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, draggedFrom location:CGPoint) {
         NSLog("dragging finished")
-        draggingCell = nil
+        
+        if originalCell != nil && draggingCell != nil {
+            
+            self.draggingCell!.frame = self.originalCell!.frame
+            UIView.animate(withDuration: 0.2, animations: {
+                self.draggingCell!.transform = self.originalCell!.transform
+            })
+            
+            
+            let replaceIndex = replaceObject(originalCell!, inCellsByObject: draggingCell!)
+            NSLog("replaceIndex \(replaceIndex)")
+            originalCell!.removeFromSuperview()
+            draggingCell = nil
+        }
+        
     }
     
 }
