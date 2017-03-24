@@ -96,7 +96,7 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
             }
             if lastTagViewInThisLevel == nil {
                 if lastTagViewInLastLevel == nil {
-                    tagView.snp.makeConstraints({ (make) in
+                    tagView.snp.remakeConstraints({ (make) in
                         make.top.equalTo(self).offset(padding)
                         make.left.equalTo(self).offset(padding)
                         if (tagView.frame.width + padding * 2 > self.frame.width) {
@@ -113,7 +113,7 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
                         }
                     })
                 }else{
-                    tagView.snp.makeConstraints({ (make) in
+                    tagView.snp.remakeConstraints({ (make) in
                         make.top.equalTo(lastTagViewInLastLevel!.snp.bottom).offset(padding)
                         make.left.equalTo(self).offset(padding)
                         if (tagView.frame.width + padding * 2 > self.frame.width) {
@@ -131,7 +131,7 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
                     })
                 }
             }else{
-                tagView.snp.makeConstraints({ (make) in
+                tagView.snp.remakeConstraints({ (make) in
                     if (currentX + tagView.frame.width + padding > self.frame.width) {
                         lastTagViewInLastLevel = lastTagViewInThisLevel
                         lastTagViewInThisLevel = tagView
@@ -216,37 +216,69 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
     
     func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, draggingFrom location:CGPoint) {
         NSLog("\(location) is dragging")
+        var position = findInsertPosition(cells, with: location)
+        NSLog("position \(position)")
+        if originalCell != nil && position == -1 && originalCell!.superview != nil && cells.contains(originalCell!){
+            cells.remove(at: cells.index(of: originalCell!)!)
+            originalCell!.removeFromSuperview()
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                self.relocateTags()
+            })
+            
+        }else if originalCell != nil && position >= 0 && position <= cells.count {
+            if cells.contains(originalCell!) {
+                if cells.index(of: originalCell!)! < position {
+                    position -= 1
+                }
+                cells.remove(at: cells.index(of: originalCell!)!)
+            }
+            if originalCell!.superview == nil {
+                self.addSubview(originalCell!)
+            }
+            cells.insert(originalCell!, at: position)
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                self.relocateTags()
+            })
+            
+        }
     }
     
     func findInsertPosition(_ cells:[UIView], with location:CGPoint) -> Int {
         var index = 0
+        var lastCell:MMDraggableTagViewCell?
+        var nextCell:MMDraggableTagViewCell?
         for tempC in cells {
             let tempCell = tempC as! MMDraggableTagViewCell
             
-            if location.y > tempCell.frame.origin.y && location.y < tempCell.frame.origin.y + tempCell.frame.size.height {
-                //if index {
-                //
-               // }
+            if location.y > tempCell.frame.origin.y && location.y <= tempCell.frame.origin.y + tempCell.frame.size.height + padding {
+                if location.x < tempCell.frame.origin.x + tempCell.frame.size.width * 1 / 4 {
+                    nextCell = tempCell
+                }else if location.x > tempCell.frame.origin.x + tempCell.frame.size.width * 3 / 4 {
+                    lastCell = tempCell
+                }
+                
+                if nextCell != nil {
+                    return index
+                }
+                
+            }else if lastCell != nil {
+                return index
             }
             
             index += 1
-            //TODO: check is it leave self orignal frame, or insert into others' gap, or in other cell's front
             
-            
-            
-            
-            //            if tempCell.tagIndex! != draggableTagViewCell.tagIndex! {
-            //                let intersection = tempCell.frame.intersection(draggableTagViewCell.frame)
-            //                if !intersection.isNull {
-            //                    if tempCell.frame.size.width/2 < intersection.size.width || tempCell.frame.size.height/2 < intersection.size.height || draggableTagViewCell.frame.size.width/2 < intersection.size.width || draggableTagViewCell.frame.size.height/2 < intersection.size.height {
-            //                        NSLog("Do something.")
-            //                    }
-            //                }
-            //            }else{
-            //                NSLog("Do not need to compare with myself")
-            //            }
         }
-        return 5;
+        if cells.first != nil && location.y < cells.first!.frame.origin.y {
+            return 0
+        }else if cells.last != nil && location.y > cells.last!.frame.origin.y + cells.last!.frame.size.height {
+            return cells.count
+        }else if lastCell != nil {
+            return cells.count
+        }
+        
+        return -1;
 
     }
     
@@ -255,16 +287,24 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
         
         if originalCell != nil && draggingCell != nil {
             
-            self.draggingCell!.frame = self.originalCell!.frame
-            UIView.animate(withDuration: 0.2, animations: {
-                self.draggingCell!.transform = self.originalCell!.transform
-            })
+//            UIView.animate(withDuration: 0.2, animations: {
+//                NSLog("self.draggingCell!.frame \(self.draggingCell!.frame)")
+//                NSLog("self.originalCell!.frame \(self.originalCell!.frame)")
+//                NSLog("self.draggingCell!.transform \(self.draggingCell!.transform)")
+//                NSLog("self.originalCell!.transform \(self.originalCell!.transform)")
+//                self.draggingCell!.frame = self.originalCell!.frame
+//                
+//            })
             
             
             let replaceIndex = replaceObject(originalCell!, inCellsByObject: draggingCell!)
             NSLog("replaceIndex \(replaceIndex)")
             originalCell!.removeFromSuperview()
             draggingCell = nil
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                self.relocateTags()
+            })
         }
         
     }

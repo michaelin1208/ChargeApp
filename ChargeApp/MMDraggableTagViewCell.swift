@@ -90,6 +90,7 @@ class MMDraggableTagViewCell: UIView {
             }
             let translation : CGPoint = sender.translation(in: self)
             //平移图片CGAffineTransformMakeTranslation
+//            self.frame.origin = CGPoint(x: self.frame.origin.x + translation.x, y: self.frame.origin.y + translation.y)
             self.transform = CGAffineTransform(translationX: netTranslation.x+translation.x, y: netTranslation.y+translation.y)
             
             delegate?.draggableTagViewCell(self, draggingFrom: sender.location(in: self.superview))
@@ -97,6 +98,11 @@ class MMDraggableTagViewCell: UIView {
             
             if sender.state == UIGestureRecognizerState.ended{
                 isDragging = false
+                
+                self.frame.origin = CGPoint(x: self.frame.origin.x + self.transform.tx, y: self.frame.origin.y + self.transform.ty)
+                self.transform.tx = 0
+                self.transform.ty = 0
+                
                 netTranslation.x = 0
                 netTranslation.y = 0
                 
