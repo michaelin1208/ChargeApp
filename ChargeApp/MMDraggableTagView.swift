@@ -88,12 +88,8 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
         var lastTagViewInLastLevel:UIView?
         var currentX = padding
         for tagView in cells {
-            if draggingCell != nil {
-                if draggingCell == tagView {
-                    NSLog("I am dragging, skip")
-                    return
-                }
-            }
+//            if draggingCell != nil {
+//            }
             if lastTagViewInThisLevel == nil {
                 if lastTagViewInLastLevel == nil {
                     tagView.snp.remakeConstraints({ (make) in
@@ -210,6 +206,10 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
         NSLog("replaceIndex \(replaceIndex)")
         
         draggingCell = draggableTagViewCell
+        draggingCell!.snp.remakeConstraints { (make) in
+            make.top.equalTo(self).offset(draggingCell!.frame.origin.y)
+            make.left.equalTo(self).offset(draggingCell!.frame.origin.x)
+        }
         
         self.bringSubview(toFront: draggableTagViewCell)
     }
@@ -224,6 +224,7 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
             
             UIView.animate(withDuration: 0.2, animations: {
                 self.relocateTags()
+                self.layoutIfNeeded()
             })
             
         }else if originalCell != nil && position >= 0 && position <= cells.count {
@@ -240,6 +241,7 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
             
             UIView.animate(withDuration: 0.2, animations: {
                 self.relocateTags()
+                self.layoutIfNeeded()
             })
             
         }
@@ -304,6 +306,7 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
             
             UIView.animate(withDuration: 0.2, animations: {
                 self.relocateTags()
+                self.layoutIfNeeded()
             })
         }
         
