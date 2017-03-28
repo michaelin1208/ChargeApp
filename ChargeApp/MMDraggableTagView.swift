@@ -16,7 +16,9 @@ let cellWidthPadding:CGFloat = 10
 @objc protocol MMDraggableTagViewDelegate: NSObjectProtocol {
     func draggableTagView(_ draggableTagView:MMDraggableTagView, cellFor indexArray:[Int]) -> MMDraggableTagViewCell?
     @objc optional func draggableTagView(_ draggableTagView:MMDraggableTagView, didSelectTag indexArray:[Int])
+    @objc optional func draggableTagView(_ draggableTagView:MMDraggableTagView, didDeselectTag indexArray:[Int])
     @objc optional func draggableTagView(_ draggableTagView:MMDraggableTagView, shouldSelectTag indexArray:[Int]) -> Bool
+    @objc optional func draggableTagView(_ draggableTagView:MMDraggableTagView, shouldDeselectTag indexArray:[Int]) -> Bool
     
 }
 
@@ -178,12 +180,24 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
 //MARK:- MMDraggableTagViewCellDelegate
     
     func draggableTagViewCell(_ draggableTagViewCell: MMDraggableTagViewCell, didClickedIn location:CGPoint) {
-        var shouldSelect = true
-        if (delegate?.draggableTagView?(self, shouldSelectTag: draggableTagViewCell.tagIndex) != nil) {
-            shouldSelect = (delegate?.draggableTagView?(self, shouldSelectTag: draggableTagViewCell.tagIndex))!
-        }
-        if shouldSelect {
-            delegate?.draggableTagView?(self, didSelectTag: draggableTagViewCell.tagIndex)
+        if draggableTagViewCell.status == .Normal {
+            var shouldSelect = true
+            if (delegate?.draggableTagView?(self, shouldSelectTag: draggableTagViewCell.tagIndex) != nil) {
+                shouldSelect = (delegate?.draggableTagView?(self, shouldSelectTag: draggableTagViewCell.tagIndex))!
+            }
+            if shouldSelect {
+                draggableTagViewCell.setStatus(.Selected)
+                delegate?.draggableTagView?(self, didSelectTag: draggableTagViewCell.tagIndex)
+            }
+        }else if draggableTagViewCell.status == .Selected {
+            var shouldSelect = true
+            if (delegate?.draggableTagView?(self, shouldDeselectTag: draggableTagViewCell.tagIndex) != nil) {
+                shouldSelect = (delegate?.draggableTagView?(self, shouldDeselectTag: draggableTagViewCell.tagIndex))!
+            }
+            if shouldSelect {
+                draggableTagViewCell.setStatus(.Normal)
+                delegate?.draggableTagView?(self, didDeselectTag: draggableTagViewCell.tagIndex)
+            }
         }
     }
     
@@ -223,8 +237,8 @@ class MMDraggableTagView: UIView, MMDraggableTagViewCellDelegate {
             originalCell!.removeFromSuperview()
             
             UIView.animate(withDuration: 0.2, animations: {
-                self.relocateTags()
-                self.layoutIfNeeded()
+                self.relocateTags()         // update autolayout constraints by SnapKit.
+                self.layoutIfNeeded()       // call layout method if needed to update subviews.
             })
             
         }else if originalCell != nil && position >= 0 && position <= cells.count {

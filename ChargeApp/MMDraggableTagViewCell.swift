@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum MMDraggableTagViewCellStatus {
+    case Normal,Selected,Disable
+}
+
 protocol MMDraggableTagViewCellDelegate: NSObjectProtocol {
     func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, didClickedIn location:CGPoint)
     func draggableTagViewCell(_ draggableTagViewCell:MMDraggableTagViewCell, startDraggingFrom location:CGPoint)
@@ -21,8 +25,17 @@ class MMDraggableTagViewCell: UIView {
     
     var titleLabel : UILabel! = UILabel.init()
     var netTranslation : CGPoint!
+    var status : MMDraggableTagViewCellStatus! = .Normal {
+        didSet {
+            updateColor()
+        }
+    }
+    
+    var colors : Dictionary<MMDraggableTagViewCellStatus,UIColor>! = [.Normal:UIColor.red, .Selected:UIColor.yellow, .Disable:UIColor.gray]
     
     var isDragging = false
+    
+    
     
     override var frame: CGRect{
         didSet {
@@ -56,6 +69,17 @@ class MMDraggableTagViewCell: UIView {
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(sender:)))
         self.addGestureRecognizer(pan)
+        
+        
+    }
+    
+    override var backgroundColor: UIColor? {
+        set {
+            updateColor()
+        }
+        get {
+            return super.backgroundColor
+        }
     }
     
     override func layoutSubviews() {
@@ -71,19 +95,33 @@ class MMDraggableTagViewCell: UIView {
         })
     }
     
+    func setStatus(_ status : MMDraggableTagViewCellStatus) {
+        self.status = status
+    }
+    
+    func setColor(_ color : UIColor, forStatus status : MMDraggableTagViewCellStatus) {
+        colors[status] = color
+    }
+    
+    func updateColor() {
+        super.backgroundColor = colors[status]!
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     
     func handleTapGesture(sender:UITapGestureRecognizer) {
-        if self.superview != nil {
+        if self.status != .Disable && self.superview != nil {
             delegate?.draggableTagViewCell(self, didClickedIn: sender.location(in: self.superview))
+        }else if self.status == .Disable {
+            NSLog("draggableTagViewCell is Disable")
         }
     }
     
     func handlePanGesture(sender:UIPanGestureRecognizer) {
-        if self.superview != nil {
+        if self.status != .Disable && self.superview != nil {
             if !isDragging {
                 isDragging = true
                 delegate?.draggableTagViewCell(self, startDraggingFrom: sender.location(in: self.superview))
@@ -109,7 +147,12 @@ class MMDraggableTagViewCell: UIView {
                 delegate?.draggableTagViewCell(self, draggedFrom: sender.location(in: self.superview))
                 
             }
+        }else if self.status == .Disable {
+            NSLog("draggableTagViewCell is Disable")
         }
     }
     
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        NSLog("touchesBegan")
+//    }
 }
